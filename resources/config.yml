@@ -3,7 +3,7 @@
 
 # World used for the bot
 world: "ndfbot"
-# Enable lose-message?
+# Enable lose-message
 lose-message: true
 win-message: true
 ...
