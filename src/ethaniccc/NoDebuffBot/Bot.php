@@ -15,13 +15,13 @@ use pocketmine\item\enchantment\Enchantment;
 use pocketmine\item\enchantment\EnchantmentInstance;
 use pocketmine\item\Item;
 use pocketmine\item\Sword;
-use pocketmine\level\Level;
+use pocketmine\world\World;
 use pocketmine\math\Vector3;
 use pocketmine\nbt\tag\CompoundTag;
-use pocketmine\Player;
+use pocketmine\player\Player;
 use pocketmine\Server;
 use pocketmine\utils\TextFormat;
-use pocketmine\network\mcpe\protocol\LevelSoundEventPacket;
+use pocketmine\network\mcpe\protocol\WorldSoundEventPacket;
 
 class Bot extends Human{
 
@@ -55,7 +55,7 @@ class Bot extends Human{
      * @param CompoundTag $nbt
      * @param string $target
      */
-    public function __construct(Level $level, CompoundTag $nbt, string $target){
+    public function __construct(World $level, CompoundTag $nbt, string $target){
         parent::__construct($level, $nbt);
         $this->target = $target;
     }
@@ -143,7 +143,8 @@ class Bot extends Human{
         return $this->isAlive();
     }
 
-    public function attackTargetPlayer() : void{
+    public function attackTargetPlayer() : void
+    {
         if(mt_rand(0, 100) % 4 === 0){
             $this->lookAt($this->getTargetPlayer()->asVector3());
         }
@@ -159,7 +160,8 @@ class Bot extends Human{
         }
     }
 
-    public function pearl($agro = false) : void{
+    public function pearl($agro = false) : void
+    {
         if($this->pearlsRemaining > 0){
             if(!$agro){
                 $max = 5;
@@ -172,7 +174,8 @@ class Bot extends Human{
         }
     }
 
-    public function pot() : void{
+    public function pot() : void
+    {
         if($this->yaw < 0){
             $this->yaw = abs($this->yaw);
         } elseif($this->yaw == 0){
@@ -184,8 +187,8 @@ class Bot extends Human{
         $this->getInventory()->setHeldItemIndex(2);
         ++$this->neededPots;
         $player = $this->getTargetPlayer();
-        $soundPacket = new LevelSoundEventPacket();
-        $soundPacket->sound = LevelSoundEventPacket::SOUND_GLASS;
+        $soundPacket = new WorldSoundEventPacket();
+        $soundPacket->sound = WorldSoundEventPacket::SOUND_GLASS;
         $soundPacket->position = $this->asVector3();
         $player->dataPacket($soundPacket);
         $effect = new EffectInstance(Effect::getEffect(Effect::INSTANT_HEALTH), 0, 1);

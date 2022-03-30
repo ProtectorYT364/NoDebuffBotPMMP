@@ -12,6 +12,8 @@ Create a world called ndfbot and execute /nodebuff.
 This is a project originally written by [ethaniccc](https://github.com/ethaniccc/NoDebuffBot).
 All bug fixes and improvments are made by Reactor development.
 
+Updated to Api 4 by revape/protectoryt
+
 ## Contribuiting
 
 Pull Requests and Issues are welcome!

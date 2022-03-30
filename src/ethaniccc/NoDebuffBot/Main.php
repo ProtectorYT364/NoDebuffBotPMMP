@@ -17,26 +17,28 @@ use pocketmine\event\player\PlayerExhaustEvent;
 use pocketmine\item\enchantment\Enchantment;
 use pocketmine\item\enchantment\EnchantmentInstance;
 use pocketmine\item\Item;
-use pocketmine\Player;
+use pocketmine\player\Player;
 use pocketmine\plugin\PluginBase;
 use pocketmine\utils\TextFormat;
 use pocketmine\utils\Config;
-use pocketmine\level\Level;
+use pocketmine\world\World;
 
 class Main extends PluginBase implements Listener{
 
     /** @var array */
     private $fighting = [];
 
-    public function onEnable(){
+    public function onEnable() : void
+    {
         $this->getServer()->getPluginManager()->registerEvents($this, $this);
         $this->saveDefaultConfig();
         $this->reloadConfig();
         $this->getLogger()->info("NoDebuffBot Loaded Successfully!");
-        $this->getLogger()->info("Plugin by: ethaniccc, bug fixes and improvements by: ilai");
+        $this->getLogger()->info("Plugin by: ethaniccc, bug fixes and improvements by: ilai, updated to api 4 by: revape");
     }
 
-    public function onDeath(PlayerDeathEvent $event) : void{
+    public function onDeath(PlayerDeathEvent $event) : void
+    {
         if(isset($this->fighting[$event->getPlayer()->getName()])){
             $event->setDrops([]);
             $e = $event->getPlayer()->getLastDamageCause();
@@ -56,7 +58,8 @@ class Main extends PluginBase implements Listener{
         }
     }
 
-    public function onDamage(EntityDamageEvent $event) : void{
+    public function onDamage(EntityDamageEvent $event) : void
+    {
         if($event->getCause() === EntityDamageEvent::CAUSE_FALL){
             $event->setCancelled();
         }
@@ -75,14 +78,14 @@ class Main extends PluginBase implements Listener{
                     $sender->sendMessage(TextFormat::RED . "You can only run this in-game!");
                 } else {
                     $cworld = $this->getConfig()->get("world");
-                    $level = $this->getServer()->getLevelByName($cworld);
+                    $level = $this->getServer()->getWorldByName($cworld);
                     
-                    if($level != $sender->getLevel()){
-                      if($this->getServer()->isLevelLoaded($cworld)){
+                    if($level != $sender->getWorld()){
+                      if($this->getServer()->isWorldLoaded($cworld)){
                       $sender->teleport($level->getSafeSpawn());
                       $this->createBot($level, $sender);
                       } else {
-                       $this->getServer()->loadLevel($level);
+                       $this->getServer()->loadWorld($level);
                        $sender->teleport($level->getSafeSpawn());
                        $this->createBot($level, $sender);
                       }
@@ -95,7 +98,7 @@ class Main extends PluginBase implements Listener{
         return true;
     }
 
-    public function createBot(Level $level, CommandSender $sender){
+    public function createBot(World $level, CommandSender $sender){
         $nbt = Entity::createBaseNBT($sender->asVector3()->subtract(10, 0, 10));
         $name = $sender->getName();
         $nbt->setTag($sender->namedtag->getTag("Skin"));
