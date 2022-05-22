@@ -28,7 +28,7 @@ class Main extends PluginBase implements Listener{
     /** @var array */
     private $fighting = [];
 
-    public function onEnable() : void
+    public function onEnable(): void
     {
         $this->getServer()->getPluginManager()->registerEvents($this, $this);
         $this->saveDefaultConfig();
@@ -98,7 +98,7 @@ class Main extends PluginBase implements Listener{
         return true;
     }
 
-    public function createBot(World $level, CommandSender $sender){
+    public function createBot(Level $level, CommandSender $sender){
         $nbt = Entity::createBaseNBT($sender->asVector3()->subtract(10, 0, 10));
         $name = $sender->getName();
         $nbt->setTag($sender->namedtag->getTag("Skin"));
