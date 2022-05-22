@@ -55,7 +55,7 @@ class Bot extends Human{
      * @param CompoundTag $nbt
      * @param string $target
      */
-    public function __construct(World $level, CompoundTag $nbt, string $target){
+    public function __construct(Level $level, CompoundTag $nbt, string $target){
         parent::__construct($level, $nbt);
         $this->target = $target;
     }
